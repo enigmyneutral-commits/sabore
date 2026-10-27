@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import com.sabore.app.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -40,20 +41,14 @@ fun LoginScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                // App Logo / Title representation
-                Box(
+                // Official App Logo
+                Image(
+                    painter = painterResource(id = R.drawable.logo_sabore),
+                    contentDescription = "Logo Saborê",
                     modifier = Modifier
-                        .size(100.dp)
-                        .background(PrimaryGreen, shape = RoundedCornerShape(24.dp)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "S",
-                        color = Color.White,
-                        fontSize = 56.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+                        .size(120.dp)
+                        .clip(RoundedCornerShape(24.dp))
+                )
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
                     text = "Saborê",

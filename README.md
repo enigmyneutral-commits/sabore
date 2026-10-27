@@ -1392,4 +1392,7 @@ Cada marco deverá possuir critérios de aceitação e testes correspondentes.
 
 Receitas que conectam pessoas. 🍲
 
+<br/>
+<small>© 2026 DEEVO Soluções Financeiras LTDA — CNPJ: 63.187.175/0001-70. Todos os direitos reservados.</small>
+
 </div>

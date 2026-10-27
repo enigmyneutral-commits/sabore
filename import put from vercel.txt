@@ -1,0 +1,51 @@
+import { put } from "@vercel/blob";
+
+const blob = await put('articles/blob.txt', 'Hello World!', { access: 'private' });
+import { get } from "@vercel/blob";
+import { type NextRequest, NextResponse } from "next/server";
+
+export async function GET(request: NextRequest) {
+  // Authenticate the request before serving the Blob.
+
+  const pathname = request.nextUrl.searchParams.get("pathname");
+  if (!pathname) {
+    return NextResponse.json({ error: "Missing pathname" }, { status: 400 });
+  }
+
+  const result = await get(pathname, {
+    access: "private",
+  });
+  if (result === null) {
+    return new NextResponse("Not found", { status: 404 });
+  }
+
+  return new NextResponse(result.stream, {
+    headers: {
+      "Cache-Control": "private, no-cache",
+      "Content-Type": result.blob.contentType,
+      "X-Content-Type-Options": "nosniff",
+    },
+  });
+}
+BLOB_READ_WRITE_TOKEN="vercel_blob_rw_7l0gPsXXQke2ykqP_TV5izpJESsVI71BXicvMXlFk7PoRkF"
+
+sabore-global-config-store
+
+All Databases
+
+Global Config Store
+
+
+
+
+
+IDecfg-=sifqmmshiyxwzpi8gogygosno6nt
+
+Digest=5bf6b008a9ec05f6870c476d10b53211797aa000f95aae344ae60f9b422286da
+
+Storage Size
+
+26 B
+
+/ 1 MB
+

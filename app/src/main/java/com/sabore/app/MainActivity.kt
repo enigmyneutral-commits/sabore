@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
 import com.sabore.app.ui.navigation.SaboreNavGraph
 import com.sabore.app.ui.theme.SaboreTheme
@@ -16,6 +17,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Enable edge-to-edge rendering for modern displays (e.g. Redmi Note 14, Android 14+)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
             SaboreTheme {
                 Surface(

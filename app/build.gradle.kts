@@ -16,6 +16,7 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+        multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -76,7 +77,7 @@ dependencies {
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
 
-    // Auth & Credential Manager & Billing & Ads
+    // Auth & Credential Manager & Billing & Ads & Efí Pay SDK
     implementation(platform("com.google.firebase:firebase-bom:35.1.0"))
     implementation(libs.firebase.auth)
     implementation("com.google.firebase:firebase-analytics")
@@ -84,9 +85,11 @@ dependencies {
     implementation(libs.androidx.credentials.play-services-auth)
     implementation(libs.play.billing)
     implementation(libs.play.services.ads)
+    implementation("br.com.gerencianet.mobile:gn-api-sdk-android:1.0.0")
 
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation("androidx.multidex:multidex:2.0.1")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

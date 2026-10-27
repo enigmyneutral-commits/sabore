@@ -18,6 +18,9 @@ sealed class Screen(val route: String) {
     object Profile : Screen("profile")
     object AddRecipe : Screen("add_recipe")
     object ProSubscription : Screen("pro_subscription")
+    object Help : Screen("help")
+    object Notifications : Screen("notifications")
+    object AssistantChat : Screen("assistant_chat")
     object RecipeDetail : Screen("recipe_detail/{recipeId}") {
         fun createRoute(recipeId: String) = "recipe_detail/$recipeId"
     }
@@ -87,6 +90,15 @@ fun SaboreNavGraph(
                     navController.popBackStack()
                 }
             )
+        }
+        composable(Screen.Help.route) {
+            HelpScreen(navController = navController)
+        }
+        composable(Screen.Notifications.route) {
+            NotificationsScreen(navController = navController)
+        }
+        composable(Screen.AssistantChat.route) {
+            AssistantChatScreen(navController = navController)
         }
         composable(
             route = Screen.RecipeDetail.route,

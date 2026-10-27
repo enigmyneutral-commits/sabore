@@ -24,6 +24,7 @@ import androidx.navigation.NavController
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
+import com.sabore.app.ui.components.AdMobBannerView
 import com.sabore.app.ui.navigation.Screen
 import com.sabore.app.ui.theme.PrimaryGreen
 import com.sabore.app.ui.theme.WarmOrange
@@ -182,19 +183,7 @@ fun HomeScreen(
             }
 
             // Free Tier AdMob Banner (Removed if user is Pro)
-            if (!isProUser) {
-                AndroidView(
-                    modifier = Modifier.fillMaxWidth(),
-                    factory = { context ->
-                        AdView(context).apply {
-                            setAdSize(AdSize.BANNER)
-                            // Test Ad Unit ID
-                            adUnitId = "ca-app-pub-3940256099942544/6300978111"
-                            loadAd(AdRequest.Builder().build())
-                        }
-                    }
-                )
-            }
+            AdMobBannerView(isProUser = isProUser)
         }
     }
 }
