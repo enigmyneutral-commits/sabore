@@ -1,15 +1,11 @@
 package com.sabore.app.ui.screens
 
-import android.os.Bundle
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,15 +15,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.AdView
 import com.sabore.app.ui.components.AdMobBannerView
 import com.sabore.app.ui.navigation.Screen
 import com.sabore.app.ui.theme.PrimaryGreen
 import com.sabore.app.ui.theme.WarmOrange
+import com.sabore.app.ui.theme.SaboreIcon
+import com.sabore.app.ui.theme.SaboreIcons
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,7 +29,7 @@ fun HomeScreen(
     navController: NavController
 ) {
     var searchQuery by remember { mutableStateOf("") }
-    var isProUser by remember { mutableStateOf(false) } // Free tier shows AdMob ads unless Pro
+    var isProUser by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -43,10 +37,10 @@ fun HomeScreen(
                 title = { Text("Saborê", fontWeight = FontWeight.Bold, color = PrimaryGreen) },
                 actions = {
                     IconButton(onClick = { navController.navigate(Screen.ProSubscription.route) }) {
-                        Icon(Icons.Default.Star, contentDescription = "Saborê Pro", tint = WarmOrange)
+                        SaboreIcon(SaboreIcons.Star, null, tintColor = WarmOrange)
                     }
                     IconButton(onClick = { navController.navigate(Screen.Profile.route) }) {
-                        Icon(Icons.Default.Person, contentDescription = "Perfil")
+                        SaboreIcon(SaboreIcons.Person, null)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
@@ -57,25 +51,25 @@ fun HomeScreen(
                 NavigationBarItem(
                     selected = true,
                     onClick = { },
-                    icon = { Icon(Icons.Default.Home, contentDescription = "Início") },
+                    icon = { SaboreIcon(SaboreIcons.HomeFilled, "Início", tintColor = PrimaryGreen) },
                     label = { Text("Início") }
                 )
                 NavigationBarItem(
                     selected = false,
-                    onClick = { navController.navigate(Screen.Explore.route) },
-                    icon = { Icon(Icons.Default.Search, contentDescription = "Explorar") },
-                    label = { Text("Explorar") }
+                    onClick = { navController.navigate(Screen.AssistantChat.route) },
+                    icon = { SaboreIcon(SaboreIcons.Chat, "Assistente") },
+                    label = { Text("Assistente") }
                 )
                 NavigationBarItem(
                     selected = false,
                     onClick = { navController.navigate(Screen.Cookbook.route) },
-                    icon = { Icon(Icons.Default.Book, contentDescription = "Meu Livro") },
+                    icon = { SaboreIcon(SaboreIcons.Book, "Meu Livro") },
                     label = { Text("Meu Livro") }
                 )
                 NavigationBarItem(
                     selected = false,
                     onClick = { navController.navigate(Screen.Community.route) },
-                    icon = { Icon(Icons.Default.People, contentDescription = "Comunidade") },
+                    icon = { SaboreIcon(SaboreIcons.People, "Comunidade") },
                     label = { Text("Comunidade") }
                 )
             }
@@ -86,12 +80,11 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            // Search Bar
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = { searchQuery = it },
                 placeholder = { Text("Buscar receitas, ingredientes...") },
-                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                leadingIcon = { SaboreIcon(SaboreIcons.Search, null) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
@@ -105,7 +98,6 @@ fun HomeScreen(
                     .fillMaxWidth(),
                 contentPadding = PaddingValues(bottom = 16.dp)
             ) {
-                // Categories Row
                 item {
                     Text(
                         text = "Categorias Gastronômicas",
@@ -136,7 +128,6 @@ fun HomeScreen(
                     }
                 }
 
-                // Featured Recipes Header
                 item {
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
@@ -146,7 +137,6 @@ fun HomeScreen(
                     )
                 }
 
-                // Sample Featured Recipe Card
                 item {
                     Card(
                         modifier = Modifier
@@ -182,7 +172,6 @@ fun HomeScreen(
                 }
             }
 
-            // Free Tier AdMob Banner (Removed if user is Pro)
             AdMobBannerView(isProUser = isProUser)
         }
     }

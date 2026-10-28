@@ -3,9 +3,6 @@ package com.sabore.app.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,6 +10,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.sabore.app.ui.theme.PrimaryGreen
+import com.sabore.app.ui.theme.SaboreIcon
+import com.sabore.app.ui.theme.SaboreIcons
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,7 +29,7 @@ fun NotificationsScreen(
                 title = { Text("Notificações", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
+                        SaboreIcon(SaboreIcons.ArrowBack, "Voltar")
                     }
                 }
             )
@@ -53,7 +52,7 @@ fun NotificationsScreen(
                             .fillMaxWidth()
                             .padding(16.dp)
                     ) {
-                        Icon(Icons.Default.Notifications, contentDescription = null, tint = PrimaryGreen)
+                        SaboreIcon(SaboreIcons.Notifications, null, tintColor = PrimaryGreen)
                         Spacer(modifier = Modifier.width(16.dp))
                         Column {
                             Text(text = title, fontWeight = FontWeight.Bold)

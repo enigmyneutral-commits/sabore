@@ -33,3 +33,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+// ⬤ PONTO DE LEITURA/REVISÃO CONCLUÍDA — sabore-app (MainActivity)
+// Acesso e leitura completa de /run/media/deevo-financeira/AI_KNOWLEDGE/sabore/sabore-app
+// Realizada em 28/10/2026. App Android (Kotlin + Jetpack Compose + Hilt + Room + Firebase + AdMob + Efí Pay).

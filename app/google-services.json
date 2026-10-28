@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "808069469814",
+    "project_id": "sabore-5ef42",
+    "storage_bucket": "sabore-5ef42.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:808069469814:android:350e4762f1d2e50c6d3157",
+        "android_client_info": {
+          "package_name": "com.sabore.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWZC0JXFaSPB1yDHKEwYRALNFuKof3uTw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

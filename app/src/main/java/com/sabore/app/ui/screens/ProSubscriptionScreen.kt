@@ -4,22 +4,19 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.CreditCard
-import androidx.compose.material.icons.filled.QrCode
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sabore.app.data.network.efi.EfiPayRepository
 import com.sabore.app.ui.theme.PrimaryGreen
+import com.sabore.app.ui.theme.SaboreIcon
+import com.sabore.app.ui.theme.SaboreIcons
 import com.sabore.app.ui.theme.WarmOrange
 import kotlinx.coroutines.launch
 
@@ -28,19 +25,19 @@ import kotlinx.coroutines.launch
 fun ProSubscriptionScreen(
     onNavigateBack: () -> Unit
 ) {
-    var selectedMethod by remember { mutableStateOf("pix") } // "pix", "pix_scheduled", "card"
+    var selectedMethod by remember { mutableStateOf("pix") }
     var isLoading by remember { mutableStateOf(false) }
     var paymentSuccessMessage by remember { mutableStateOf<String?>(null) }
     
-    // Card fields
     var cardNumber by remember { mutableStateOf("") }
     var cardCvv by remember { mutableStateOf("") }
     var cardExpiry by remember { mutableStateOf("") }
     var cardHolder by remember { mutableStateOf("") }
-
+    
     val scrollState = rememberScrollState()
     val coroutineScope = rememberCoroutineScope()
-    val efiRepository = remember { EfiPayRepository() }
+    val appContext = LocalContext.current.applicationContext
+    val efiRepository = remember(appContext) { EfiPayRepository(appContext) }
 
     Scaffold(
         topBar = {
@@ -48,7 +45,7 @@ fun ProSubscriptionScreen(
                 title = { Text("Saborê Pro - Checkout") },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
+                        SaboreIcon(SaboreIcons.ArrowBack, "Voltar")
                     }
                 }
             )
@@ -62,12 +59,7 @@ fun ProSubscriptionScreen(
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(
-                imageVector = Icons.Default.Star,
-                contentDescription = null,
-                tint = WarmOrange,
-                modifier = Modifier.size(60.dp)
-            )
+            SaboreIcon(SaboreIcons.Star, null, tintColor = PrimaryGreen, size = 48.dp)
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = "Assinatura Saborê Pro",
@@ -84,7 +76,6 @@ fun ProSubscriptionScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Payment Method Selector
             Text(text = "Escolha a forma de pagamento:", fontWeight = FontWeight.Bold, modifier = Modifier.align(Alignment.Start))
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -164,7 +155,7 @@ fun ProSubscriptionScreen(
                         modifier = Modifier.padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Icon(Icons.Default.QrCode, contentDescription = null, tint = PrimaryGreen, modifier = Modifier.size(48.dp))
+                        SaboreIcon(SaboreIcons.Bookmark, null, tintColor = PrimaryGreen, size = 48.dp)
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = if (selectedMethod == "pix") "Cobrança Pix Imediata (Efí Pay)" else "Cobrança Pix com Vencimento / Agendado (Efí Pay)",
@@ -218,7 +209,7 @@ fun ProSubscriptionScreen(
                 if (isLoading) {
                     CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary, modifier = Modifier.size(24.dp))
                 } else {
-                    Icon(Icons.Default.CreditCard, contentDescription = null)
+                    SaboreIcon(SaboreIcons.Star, null)
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "Concluir Assinatura (R$ 4,99/mês)",

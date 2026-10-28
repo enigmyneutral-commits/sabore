@@ -3,12 +3,6 @@ package com.sabore.app.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Book
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.People
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -18,6 +12,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.sabore.app.ui.navigation.Screen
 import com.sabore.app.ui.theme.PrimaryGreen
+import com.sabore.app.ui.theme.SaboreIcon
+import com.sabore.app.ui.theme.SaboreIcons
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,7 +32,7 @@ fun MyCookbookScreen(
                 containerColor = PrimaryGreen,
                 contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Adicionar Receita")
+                SaboreIcon(SaboreIcons.Add, "Adicionar Receita")
             }
         },
         bottomBar = {
@@ -44,25 +40,25 @@ fun MyCookbookScreen(
                 NavigationBarItem(
                     selected = false,
                     onClick = { navController.navigate(Screen.Home.route) },
-                    icon = { Icon(Icons.Default.Home, contentDescription = "Início") },
+                    icon = { SaboreIcon(SaboreIcons.Home, "Início") },
                     label = { Text("Início") }
                 )
                 NavigationBarItem(
                     selected = false,
                     onClick = { navController.navigate(Screen.Explore.route) },
-                    icon = { Icon(Icons.Default.Search, contentDescription = "Explorar") },
+                    icon = { SaboreIcon(SaboreIcons.Search, "Explorar") },
                     label = { Text("Explorar") }
                 )
                 NavigationBarItem(
                     selected = true,
                     onClick = { },
-                    icon = { Icon(Icons.Default.Book, contentDescription = "Meu Livro") },
+                    icon = { SaboreIcon(SaboreIcons.Book, "Meu Livro", tintColor = PrimaryGreen) },
                     label = { Text("Meu Livro") }
                 )
                 NavigationBarItem(
                     selected = false,
                     onClick = { navController.navigate(Screen.Community.route) },
-                    icon = { Icon(Icons.Default.People, contentDescription = "Comunidade") },
+                    icon = { SaboreIcon(SaboreIcons.People, "Comunidade") },
                     label = { Text("Comunidade") }
                 )
             }
@@ -91,7 +87,7 @@ fun MyCookbookScreen(
                     onClick = { navController.navigate(Screen.AddRecipe.route) },
                     colors = ButtonDefaults.buttonColors(containerColor = PrimaryGreen)
                 ) {
-                    Icon(Icons.Default.Add, contentDescription = null)
+                    SaboreIcon(SaboreIcons.Add, "Adicionar Receita")
                     Spacer(modifier = Modifier.width(8.dp))
                     Text("Adicionar Receita")
                 }

@@ -1,28 +1,39 @@
 package com.sabore.app.ui.screens
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import com.sabore.app.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.sabore.app.R
+import com.sabore.app.ui.auth.AuthGoogleViewModel
+import com.sabore.app.ui.auth.AuthGoogleViewModel.GoogleSignInResult
 import com.sabore.app.ui.theme.PrimaryGreen
-import com.sabore.app.ui.theme.WarmOrange
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     onLoginSuccess: () -> Unit
 ) {
+    val authViewModel: AuthGoogleViewModel = hiltViewModel()
+
     var isLoading by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    val context = LocalContext.current
+    val activity = context as? ComponentActivity
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -41,7 +52,6 @@ fun LoginScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                // Official App Logo
                 Image(
                     painter = painterResource(id = R.drawable.logo_sabore),
                     contentDescription = "Logo Saborê",
@@ -69,15 +79,31 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                errorMessage?.let { msg ->
+                    Text(
+                        text = msg,
+                        style = MaterialTheme.typography.bodySmall,
+                        textAlign = TextAlign.Center,
+                        color = Color.Red,
+                        fontSize = 12.sp
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+
                 Button(
                     onClick = {
-                        isLoading = true
-                        // Simulate or trigger Google Sign-In (AUTH-02)
-                        onLoginSuccess()
+                        if (activity == null) {
+                            errorMessage = "Erro: Activity não disponível"
+                        } else {
+                            isLoading = true
+                            errorMessage = null
+                            authViewModel.signInWithGoogle(activity)
+                        }
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp),
+                    enabled = !isLoading && activity != null,
                     colors = ButtonDefaults.buttonColors(containerColor = PrimaryGreen),
                     shape = RoundedCornerShape(12.dp)
                 ) {
@@ -102,6 +128,24 @@ fun LoginScreen(
                 )
                 Spacer(modifier = Modifier.height(24.dp))
             }
+        }
+    }
+
+    val result by authViewModel.googleSignInResult.collectAsState()
+    LaunchedEffect(result) {
+        when (result) {
+            is GoogleSignInResult.Success -> {
+                isLoading = false
+                onLoginSuccess()
+            }
+            is GoogleSignInResult.Failure -> {
+                isLoading = false
+                errorMessage = (result as GoogleSignInResult.Failure).message
+            }
+            GoogleSignInResult.SignedOut -> {
+                isLoading = false
+            }
+            null -> Unit
         }
     }
 }

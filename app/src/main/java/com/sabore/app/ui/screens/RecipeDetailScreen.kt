@@ -5,11 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,6 +15,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.sabore.app.ui.theme.PrimaryGreen
+import com.sabore.app.ui.theme.SaboreIcon
+import com.sabore.app.ui.theme.SaboreIcons
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,6 +27,8 @@ fun RecipeDetailScreen(
     onNavigateBack: () -> Unit
 ) {
     val scrollState = rememberScrollState()
+    var servings by remember { mutableStateOf(4) }
+    var isFollowingChef by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -37,15 +36,15 @@ fun RecipeDetailScreen(
                 title = { Text("Detalhes da Receita") },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
+                        SaboreIcon(SaboreIcons.ArrowBack, "Voltar")
                     }
                 },
                 actions = {
                     IconButton(onClick = { /* Save to cookbook */ }) {
-                        Icon(Icons.Default.Bookmark, contentDescription = "Salvar no Livro")
+                        SaboreIcon(SaboreIcons.Bookmark, "Salvar")
                     }
                     IconButton(onClick = { /* Share recipe */ }) {
-                        Icon(Icons.Default.Share, contentDescription = "Compartilhar")
+                        SaboreIcon(SaboreIcons.Share, "Compartilhar")
                     }
                 }
             )
@@ -55,18 +54,36 @@ fun RecipeDetailScreen(
                 modifier = Modifier.fillMaxWidth(),
                 tonalElevation = 8.dp
             ) {
-                Box(modifier = Modifier.padding(16.dp)) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    OutlinedButton(
+                        onClick = { /* Save action */ },
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(50.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        SaboreIcon(SaboreIcons.Bookmark, null, tintColor = PrimaryGreen)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("Salvar", color = PrimaryGreen, fontWeight = FontWeight.Bold)
+                    }
+
                     Button(
                         onClick = { onStartCooking(recipeId) },
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .weight(1.5f)
                             .height(50.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = PrimaryGreen),
                         shape = RoundedCornerShape(12.dp)
                     ) {
-                        Icon(Icons.Default.PlayArrow, contentDescription = null)
+                        SaboreIcon(SaboreIcons.PlayArrow, null)
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Iniciar Modo de Cozinha", fontWeight = FontWeight.Bold)
+                        Text("Modo de preparo", fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -79,31 +96,69 @@ fun RecipeDetailScreen(
                 .verticalScroll(scrollState)
                 .padding(16.dp)
         ) {
-            // Recipe Header Image placeholder
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(220.dp)
+                    .height(240.dp)
                     .clip(RoundedCornerShape(16.dp))
-                    .background(PrimaryGreen.copy(alpha = 0.2f)),
+                    .background(PrimaryGreen.copy(alpha = 0.15f)),
                 contentAlignment = Alignment.Center
             ) {
-                Text("Fotografia da Receita", color = PrimaryGreen, fontWeight = FontWeight.SemiBold)
+                Text("Bolo de Chocolate Fofinho", style = MaterialTheme.typography.titleMedium, color = PrimaryGreen, fontWeight = FontWeight.Bold)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Bolo de Cenoura da Dona Maria",
+                text = "Bolo de Chocolate Fofinho",
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "Por Dona Maria • Bolos e tortas",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
-            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Author & Follow row
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Box(
+                            modifier = Modifier
+                                .size(40.dp)
+                                .clip(RoundedCornerShape(20.dp))
+                                .background(PrimaryGreen),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text("AP", color = Color.White, fontWeight = FontWeight.Bold)
+                        }
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Column {
+                            Text("Ana Paula", fontWeight = FontWeight.Bold)
+                            Text("⭐ 4.9 (1.2k avaliações)", style = MaterialTheme.typography.bodySmall, color = Color.Gray)
+                        }
+                    }
+                    Button(
+                        onClick = { isFollowingChef = !isFollowingChef },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = if (isFollowingChef) MaterialTheme.colorScheme.surface else PrimaryGreen
+                        ),
+                        shape = RoundedCornerShape(20.dp)
+                    ) {
+                        Text(
+                            text = if (isFollowingChef) "Seguindo" else "Seguir",
+                            color = if (isFollowingChef) PrimaryGreen else Color.White
+                        )
+                    }
+                }
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -111,34 +166,59 @@ fun RecipeDetailScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
-                InfoBadge(label = "Preparo", value = "20 min")
+                InfoBadge(label = "Preparo", value = "50 min")
                 InfoBadge(label = "Forno", value = "40 min")
-                InfoBadge(label = "Rendimento", value = "10 porções")
+                InfoBadge(label = "Porções", value = "$servings")
                 InfoBadge(label = "Dificuldade", value = "Fácil")
             }
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Text(
-                text = "Ingredientes",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Ingredientes",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+                // Portion adjusters
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    IconButton(onClick = { if (servings > 1) servings-- }) {
+                        Text("➖", fontWeight = FontWeight.Bold)
+                    }
+                    Text("$servings porções", fontWeight = FontWeight.Bold, modifier = Modifier.padding(horizontal = 4.dp))
+                    IconButton(onClick = { servings++ }) {
+                        Text("➕", fontWeight = FontWeight.Bold)
+                    }
+                }
+            }
+
             Spacer(modifier = Modifier.height(8.dp))
-            val ingredients = listOf(
-                "3 cenouras médias",
+
+            val baseIngredients = listOf(
                 "3 ovos",
-                "1 xícara de óleo",
-                "2 xícaras de açúcar",
+                "1 xícara de açúcar",
+                "1/2 xícara de óleo",
+                "1 xícara de leite",
                 "2 xícaras de farinha de trigo",
+                "1 xícara de chocolate em pó",
                 "1 colher de sopa de fermento"
             )
-            ingredients.forEach { ingredient ->
-                Text(
-                    text = "• $ingredient",
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(vertical = 4.dp)
-                )
+
+            baseIngredients.forEach { ingredient ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Checkbox(checked = false, onCheckedChange = {})
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(text = ingredient, style = MaterialTheme.typography.bodyLarge)
+                }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -149,22 +229,35 @@ fun RecipeDetailScreen(
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(8.dp))
+
             val steps = listOf(
-                "Prepare e bata as cenouras, os ovos e o óleo no liquidificador.",
-                "Em uma tigela, misture o açúcar e a farinha de trigo.",
-                "Incorpore a mistura líquida aos secos e acrescente o fermento.",
-                "Coloque em uma forma untada e asse em forno pré-aquecido até atingir o ponto desejado."
+                "Bata os ovos, o açúcar e o óleo.",
+                "Adicione o leite e a farinha.",
+                "Misture o chocolate e o fermento.",
+                "Asse em forno pré-aquecido a 180°C por 40 minutos."
             )
+
             steps.forEachIndexed { index, step ->
-                Row(modifier = Modifier.padding(vertical = 6.dp)) {
-                    Text(
-                        text = "${index + 1}. ",
-                        fontWeight = FontWeight.Bold,
-                        color = PrimaryGreen
-                    )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    verticalAlignment = Alignment.Top
+                ) {
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = PrimaryGreen.copy(alpha = 0.1f),
+                        modifier = Modifier.size(28.dp)
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Text(text = "${index + 1}", color = PrimaryGreen, fontWeight = FontWeight.Bold)
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(12.dp))
                     Text(
                         text = step,
-                        style = MaterialTheme.typography.bodyLarge
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.weight(1f)
                     )
                 }
             }
